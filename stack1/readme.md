@@ -9,7 +9,7 @@ Khi chạy chương trình yêu cầu truyền vào 1 argument. Chúng ta cùng 
 
 ![main2](main2.png)
 
-bỏ qua phần check arg vào main, chúng ta quan tâm từ main+35. Nhìn qua thì nó tương tự bài stack0, chúng ta có thể ghi đè modified, thay đổi EIP. Và modified yêu cầu một giá trị cụ thể chứ ko chỉ là khác 0 như bài trước, đó là: `0x61626364`. Và một điểm khác là modified nhận giá trị qua hàm strcpy từ arg[1] vào buf thay vì hàm gets.
+bỏ qua phần check arg vào main, chúng ta quan tâm từ main+35. Nhìn qua thì nó tương tự bài stack0, chúng ta có thể ghi đè modified, thay đổi EIP. Và modified yêu cầu một giá trị cụ thể chứ ko chỉ là khác 0 như bài trước, đó là: `0x61626364`. Và một điểm khác hàm strcpy từ arg[1] vào buf thay vì hàm gets.
 
 ## Solution
 
