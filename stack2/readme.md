@@ -19,3 +19,9 @@ biến `modified` ở sau `buf`, nên phần `padding: 0x58-0x18 = 0x40`. bây g
 
 ![run](run.png)
 
+### Ret2ret
+
+Cũng tương tự, bài này có thể giải quyết bằng cách control EIP để jump về nhánh if chúng ta cần. Dùng cyclic và gdb pwndbg tìm được padding size = 84 bytes.
+Payload: `export GREENIE=$(python -c 'print "a"*84+"\xef\x84\x04\x08"')`
+
+![ret2ret](ret2ret.png)
