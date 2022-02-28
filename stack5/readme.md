@@ -60,8 +60,4 @@ io.sendline(payload)
 io.interactive()
 ```
 
-
-
 ![run](run.png)
-
-
