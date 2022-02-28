@@ -52,6 +52,7 @@ Giải thích 1 chút, trên môi trường ubuntu của protostar thì ASLR off
 ![screenshot](padding.png)
 
 `padding = cyclic(cyclic_find(uaaa))`
+
 *tìm địa chỉ system()*
 
 ```Terminal

