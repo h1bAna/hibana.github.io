@@ -57,7 +57,7 @@ p.interactive()
 
 ### inject code
 
-Check qua phân vùng stack, mình thấy nó có quyền excute. Nên mình sẽ inject shellcode vào stack.
+Check qua phân vùng stack, mình thấy nó có quyền excute. Nên mình sẽ inject shellcode vào stack. Shellcode có thể tìm trên mạng, hoặc dùng shellcraft để tạo. 
 
 ```python
 #!/usr/bin/python3
