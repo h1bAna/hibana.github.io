@@ -71,4 +71,4 @@ p.sendline(payload)
 p.interactive()
 ```
 
-![shell](shell.png)
+![shell1](shell1.png)
