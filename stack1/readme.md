@@ -70,3 +70,5 @@ p = process(['./stack0', payload])
 p.sendline(payload)
 p.interactive()
 ```
+
+![shell](shell.png)
