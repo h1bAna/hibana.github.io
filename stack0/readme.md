@@ -56,9 +56,10 @@ p.interactive()
 
 ![shell2](shell2.png)
 
-#### cách2
+### inject code
 
 Check qua phân vùng stack, mình thấy nó có quyền excute. Nên mình sẽ inject shellcode vào stack.
+
 ```python
 #!/usr/bin/python3
 from pwn import *
