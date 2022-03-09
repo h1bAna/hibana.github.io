@@ -70,3 +70,5 @@ f.write(payload)
 p = process(['./stack2'], env={'GREENIE': payload})
 p.interactive()
 ```
+
+![shell](shell.png)
